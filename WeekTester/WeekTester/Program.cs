@@ -17,35 +17,53 @@ namespace WeekTester
         {
             DateTime dt = DateTime.Now;
 
-            Console.WriteLine(dt.Date);
-            Console.WriteLine(dt.Month);
-            Console.WriteLine(dt.DayOfWeek);
-            Console.WriteLine(dt.DayOfYear);
-
-            dt = PrintRestOfMonth(dt);
+            PrintWeek(DateTime.Now.AddDays(4));
 
             for (int i = 0; i < 12; i++)
             {
-                dt = PrintRestOfMonth(dt);
+                dt = PrintMonth(dt);
             }
+
 
         }
 
-        public static DateTime PrintRestOfMonth(DateTime date)
+        public static DateTime PrintWeek(DateTime date)
+        {
+            while (date.DayOfWeek > DayOfWeek.Sunday)
+            {
+                date = date.AddDays(-1);
+            }
+
+            while (true)
+            {
+                Console.Write("{0:00} ", date.Day);
+
+                if (date.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    Console.WriteLine();
+                    break;
+                }
+                
+                date = date.AddDays(1);
+            }
+
+            return date;
+        }
+
+        public static DateTime PrintMonth(DateTime date)
         {
             int monthDays = DateTime.DaysInMonth(date.Year, date.Month);
             int daysInYear = date.DayOfYear;
-            int dayInMonth = date.Day;
 
             Console.WriteLine();
+
             for (int i = 0; i < (int)date.DayOfWeek; i++)
             {
                 Console.Write("   ");
             }
-            
-            while (dayInMonth <= monthDays)
+
+            for (int j = date.Day; j <= monthDays; j++)
             {
-               
                 switch (date.DayOfWeek)
                 {
                     case DayOfWeek.Sunday:
@@ -54,17 +72,15 @@ namespace WeekTester
                     case DayOfWeek.Wednesday:
                     case DayOfWeek.Thursday:
                     case DayOfWeek.Friday:
-                        Console.Write("{0:00} ", dayInMonth);
+                        Console.Write("{0:00} ", date.Day);
                         break;
                     case DayOfWeek.Saturday:
-                        Console.WriteLine("{0:00} ", dayInMonth);
+                        Console.WriteLine("{0:00} ", date.Day);
                         break;
                     default:
                         break;
                 }
                 date = date.AddDays(1);
-                dayInMonth++;
-
             }
 
             return date;
